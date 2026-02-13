@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding-top: 100px;
-            background-color: #ffccd5;
+            background-color: #ffe6f0;
             overflow: hidden;
         }
 
@@ -36,19 +36,34 @@
             transition: all 0.6s ease;
         }
 
-        .love-screen {
+        .celebration-screen {
             display: none;
-            background-color: #ffccd5;
             height: 100vh;
         }
 
-        .love-screen img {
-            width: 300px;
-            margin-top: 30px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: #ffccd5; /* blends white edges */
+        .celebration-text {
+            font-size: 50px;
+            animation: pop 0.6s ease forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .confetti {
+            position: fixed;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
         }
     </style>
 </head>
@@ -56,21 +71,21 @@
 
 <div id="main">
     <h1>Will you be my Valentine? 💖</h1>
-
     <button id="yes">Yes</button>
     <button id="no">No</button>
 </div>
 
-<div class="love-screen" id="loveScreen">
-    <h1>YAYYY 💕 You made me the happiest person alive 🥹</h1>
-    <img src="love.png" alt="cute bears">
+<div class="celebration-screen" id="celebration">
+    <h1 class="celebration-text">
+        YAYYY 💕 You made me the happiest person alive 🥹🎉
+    </h1>
 </div>
 
 <script>
     const noButton = document.getElementById("no");
     const yesButton = document.getElementById("yes");
     const main = document.getElementById("main");
-    const loveScreen = document.getElementById("loveScreen");
+    const celebration = document.getElementById("celebration");
 
     noButton.addEventListener("mouseover", function () {
         const maxX = window.innerWidth - noButton.offsetWidth;
@@ -85,9 +100,29 @@
 
     yesButton.addEventListener("click", function () {
         main.style.display = "none";
-        loveScreen.style.display = "block";
+        celebration.style.display = "block";
         document.body.style.backgroundColor = "#ffccd5";
+
+        createConfetti();
     });
+
+    function createConfetti() {
+        for (let i = 0; i < 100; i++) {
+            let confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.backgroundColor = randomColor();
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+            document.body.appendChild(confetti);
+        }
+    }
+
+    function randomColor() {
+        const colors = ["#ff4d6d", "#ff99c8", "#ffc2d1", "#ffb3c6", "#ff758f"];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
 </script>
 
 </body>
