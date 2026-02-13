@@ -4,16 +4,109 @@
     <title>Be My Valentine?</title>
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
 
-        /* INITIAL SCENE */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
         .scene {
             width: 100vw;
             height: 100vh;
             background: linear-gradient(to bottom, #87ceeb 0%, #ccefff 55%, #7ec850 55%);
             position: relative;
             overflow: hidden;
+        }
+
+        /* SUN */
+        .sun {
+            position: absolute;
+            top: 50px;
+            right: 80px;
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle, #ffd966, #ffb703);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(255,183,3,0.8);
+        }
+
+        /* CLOUDS */
+        .cloud {
+            position: absolute;
+            background: white;
+            width: 120px;
+            height: 60px;
+            border-radius: 50px;
+            opacity: 0.9;
+            animation: float 40s linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(120vw); }
+        }
+
+        /* BIRDS */
+        .bird {
+            position: absolute;
+            font-size: 24px;
+            animation: fly 25s linear infinite;
+        }
+
+        @keyframes fly {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(120vw); }
+        }
+
+        /* TREE */
+        .tree {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .trunk {
+            width: 20px;
+            height: 80px;
+            background: #8b5a2b;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .leaves {
+            width: 80px;
+            height: 80px;
+            background: #2e8b57;
+            border-radius: 50%;
+            margin-top: -50px;
+        }
+
+        /* ROSES ON GROUND */
+        .rose {
+            position: absolute;
+            bottom: 0;
+            border-radius: 50%;
+        }
+
+        /* FALLING ROSES */
+        .falling-rose {
+            position: absolute;
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        /* CONTENT */
+        .content {
+            position: relative;
+            z-index: 10;
             text-align: center;
+            padding-top: 150px;
         }
 
         h1 {
@@ -31,116 +124,127 @@
             cursor: pointer;
         }
 
-        #yes { background-color: #ff4d6d; color: white; }
-        #no { background-color: #999; position: absolute; transition: all 0.5s ease; }
+        #yes {
+            background-color: #ff4d6d;
+            color: white;
+        }
 
-        .content { padding-top: 150px; position: relative; z-index: 5; }
+        #no {
+            background-color: #999;
+            position: absolute;
+            transition: all 0.5s ease;
+        }
 
-        /* FINAL CELEBRATION SCREEN */
-        .final {
+        .celebration {
             display: none;
-            width: 100vw;
-            height: 100vh;
-            background: #ffd60a;
-            position: absolute;
-            top: 0;
-            left: 0;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .yay {
-            font-size: 70px;
-            margin-top: 80px;
-            animation: pop 0.6s ease forwards;
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* HUGGING PEOPLE */
-        .person {
-            position: absolute;
-            bottom: 150px;
-            width: 60px;
-            height: 120px;
-            background: #333;
-            border-radius: 30px;
-        }
-
-        .left { left: 40%; animation: moveRight 2s forwards; }
-        .right { right: 40%; animation: moveLeft 2s forwards; }
-
-        @keyframes moveRight {
-            to { left: 48%; }
-        }
-
-        @keyframes moveLeft {
-            to { right: 48%; }
-        }
-
-        /* HEART */
-        .heart {
-            position: absolute;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 200px;
-            height: 200px;
-            background: red;
-            transform-origin: center;
-            clip-path: path("M100 30 C100 -20 200 -20 200 50 C200 120 100 170 100 200 C100 170 0 120 0 50 C0 -20 100 -20 100 30");
-            animation: none;
-        }
-
-        .showHeart {
-            animation: heartPop 1s forwards;
-        }
-
-        @keyframes heartPop {
-            to { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        /* CONFETTI */
-        .confetti {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh); }
+            margin-top: 60px;
         }
     </style>
 </head>
 <body>
 
 <div class="scene" id="scene">
+
+    <div class="sun"></div>
+
     <div class="content" id="main">
         <h1>Will you be my Valentine? 💖</h1>
         <button id="yes">Yes</button>
         <button id="no">No</button>
     </div>
-</div>
 
-<div class="final" id="finalScreen">
-    <div class="yay">YAYYY 💕</div>
-    <div class="person left"></div>
-    <div class="person right"></div>
-    <div class="heart" id="bigHeart"></div>
+    <div class="celebration" id="celebration">
+        <h1>YAYYY 💕 You made me the happiest person alive 🥹🌸</h1>
+    </div>
+
 </div>
 
 <script>
+    const scene = document.getElementById("scene");
+
+    const colors = [
+        "#ff4d6d", "#ff758f", "#ff99c8",
+        "#ffb3c6", "#ffccd5", "#c9184a",
+        "#d00000", "#f72585", "#b5179e"
+    ];
+
+    /* 20 TREES */
+    for (let i = 0; i < 20; i++) {
+        let tree = document.createElement("div");
+        tree.className = "tree";
+        tree.style.left = Math.random() * 100 + "vw";
+
+        let trunk = document.createElement("div");
+        trunk.className = "trunk";
+
+        let leaves = document.createElement("div");
+        leaves.className = "leaves";
+
+        tree.appendChild(leaves);
+        tree.appendChild(trunk);
+        scene.appendChild(tree);
+    }
+
+    /* 5 CLOUDS */
+    for (let i = 0; i < 5; i++) {
+        let cloud = document.createElement("div");
+        cloud.className = "cloud";
+        cloud.style.top = Math.random() * 200 + "px";
+        cloud.style.animationDuration = (30 + Math.random() * 20) + "s";
+        scene.appendChild(cloud);
+    }
+
+    /* 7 BIRDS */
+    for (let i = 0; i < 7; i++) {
+        let bird = document.createElement("div");
+        bird.className = "bird";
+        bird.innerHTML = "🕊";
+        bird.style.top = Math.random() * 250 + "px";
+        bird.style.animationDuration = (20 + Math.random() * 10) + "s";
+        scene.appendChild(bird);
+    }
+
+    /* GROUND ROSES */
+    for (let i = 0; i < 600; i++) {
+        let rose = document.createElement("div");
+        rose.className = "rose";
+
+        let size = Math.random() * 10 + 5;
+        rose.style.width = size + "px";
+        rose.style.height = size + "px";
+        rose.style.left = Math.random() * 100 + "vw";
+        rose.style.background = colors[Math.floor(Math.random() * colors.length)];
+        rose.style.bottom = Math.random() * 40 + "px";
+
+        scene.appendChild(rose);
+    }
+
+    /* CONTINUOUS FALLING ROSES */
+    setInterval(() => {
+        let rose = document.createElement("div");
+        rose.className = "falling-rose";
+
+        let size = Math.random() * 8 + 4;
+        rose.style.width = size + "px";
+        rose.style.height = size + "px";
+        rose.style.left = Math.random() * 100 + "vw";
+        rose.style.background = colors[Math.floor(Math.random() * colors.length)];
+        rose.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+        scene.appendChild(rose);
+
+        setTimeout(() => {
+            rose.remove();
+        }, 7000);
+
+    }, 200);
+
+    /* NO BUTTON MOVEMENT */
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    const scene = document.getElementById("scene");
-    const finalScreen = document.getElementById("finalScreen");
-    const heart = document.getElementById("bigHeart");
+    const main = document.getElementById("main");
+    const celebration = document.getElementById("celebration");
 
-    // No button dodge
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -148,27 +252,9 @@
         noBtn.style.top = y + "px";
     });
 
-    // YES CLICK
     yesBtn.addEventListener("click", () => {
-
-        scene.style.display = "none";
-        finalScreen.style.display = "block";
-
-        // Big Confetti Explosion
-        for (let i = 0; i < 200; i++) {
-            let conf = document.createElement("div");
-            conf.className = "confetti";
-            conf.style.left = Math.random() * 100 + "vw";
-            conf.style.background = ["#ff4d6d","#00b4d8","#ffd60a","#ff99c8"][Math.floor(Math.random()*4)];
-            conf.style.animationDuration = (2 + Math.random() * 3) + "s";
-            finalScreen.appendChild(conf);
-        }
-
-        // Heart appears after hug
-        setTimeout(() => {
-            heart.classList.add("showHeart");
-        }, 2000);
-
+        main.style.display = "none";
+        celebration.style.display = "block";
     });
 </script>
 
