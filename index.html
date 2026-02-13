@@ -3,21 +3,18 @@
 <head>
     <title>Be My Valentine?</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
             overflow: hidden;
+            font-family: Arial, sans-serif;
         }
 
-        /* 🌤 SKY */
         .scene {
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(to bottom, #87ceeb 0%, #ccefff 60%, #7ec850 60%);
+            background: linear-gradient(to bottom, #87ceeb 0%, #ccefff 55%, #7ec850 55%);
             position: relative;
             text-align: center;
         }
@@ -27,51 +24,55 @@
             position: absolute;
             top: 50px;
             right: 80px;
-            width: 120px;
-            height: 120px;
+            width: 130px;
+            height: 130px;
             background: radial-gradient(circle, #ffd966, #ffb703);
             border-radius: 50%;
-            box-shadow: 0 0 50px rgba(255,183,3,0.8);
+            box-shadow: 0 0 60px rgba(255,183,3,0.8);
         }
 
         /* 🌳 TREE */
         .tree {
             position: absolute;
             bottom: 120px;
-            left: 80px;
+            left: 100px;
         }
 
-        .tree .trunk {
+        .trunk {
             width: 40px;
-            height: 120px;
+            height: 130px;
             background: #8b5a2b;
             margin: auto;
             border-radius: 10px;
         }
 
-        .tree .leaves {
-            width: 160px;
-            height: 160px;
+        .leaves {
+            width: 180px;
+            height: 180px;
             background: #2e8b57;
             border-radius: 50%;
-            margin-top: -100px;
+            margin-top: -110px;
         }
 
-        /* 🌹 FLOWERS */
-        .flower {
+        /* 🌹 ROSES */
+        .rose {
             position: absolute;
-            bottom: 80px;
-            width: 14px;
-            height: 14px;
-            background: #ff4d6d;
+            bottom: 0;
             border-radius: 50%;
+            opacity: 0.95;
         }
 
-        /* 💖 CONTENT */
+        /* CONTENT */
+        .content {
+            position: relative;
+            z-index: 10;
+            padding-top: 150px;
+        }
+
         h1 {
-            font-size: 50px;
+            font-size: 55px;
             color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
         }
 
         button {
@@ -94,17 +95,9 @@
             transition: all 0.5s ease;
         }
 
-        .center {
-            position: relative;
-            top: 140px;
-            z-index: 10;
-        }
-
         .celebration {
             display: none;
-            position: relative;
-            top: 180px;
-            z-index: 10;
+            margin-top: 60px;
         }
     </style>
 </head>
@@ -112,32 +105,21 @@
 
 <div class="scene">
 
-    <!-- SUN -->
     <div class="sun"></div>
 
-    <!-- TREE -->
     <div class="tree">
         <div class="leaves"></div>
         <div class="trunk"></div>
     </div>
 
-    <!-- FLOWERS -->
-    <div class="flower" style="left:20%;"></div>
-    <div class="flower" style="left:30%;"></div>
-    <div class="flower" style="left:40%;"></div>
-    <div class="flower" style="left:55%;"></div>
-    <div class="flower" style="left:70%;"></div>
-
-    <!-- QUESTION -->
-    <div id="main" class="center">
+    <div class="content" id="main">
         <h1>Will you be my Valentine? 💖</h1>
         <button id="yes">Yes</button>
         <button id="no">No</button>
     </div>
 
-    <!-- CELEBRATION -->
-    <div id="celebration" class="celebration">
-        <h1>YAYYY 💕 You made me the happiest person alive 🥹</h1>
+    <div class="celebration" id="celebration">
+        <h1>YAYYY 💕 You made me the happiest person alive 🥹🌸</h1>
     </div>
 
 </div>
@@ -147,7 +129,33 @@
     const yesBtn = document.getElementById("yes");
     const main = document.getElementById("main");
     const celebration = document.getElementById("celebration");
+    const scene = document.querySelector(".scene");
 
+    // 🌹 Generate Thousands of Roses
+    const colors = [
+        "#ff4d6d", "#ff758f", "#ff99c8",
+        "#ffb3c6", "#ffccd5", "#c9184a",
+        "#d00000", "#e63946", "#f72585",
+        "#b5179e", "#7209b7"
+    ];
+
+    for (let i = 0; i < 800; i++) {
+        let rose = document.createElement("div");
+        rose.classList.add("rose");
+
+        let size = Math.random() * 12 + 6;
+        rose.style.width = size + "px";
+        rose.style.height = size + "px";
+
+        rose.style.left = Math.random() * 100 + "vw";
+        rose.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        rose.style.bottom = Math.random() * 40 + "px";
+
+        scene.appendChild(rose);
+    }
+
+    // Move No button
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
