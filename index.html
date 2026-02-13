@@ -16,10 +16,10 @@
             height: 100vh;
             background: linear-gradient(to bottom, #87ceeb 0%, #ccefff 55%, #7ec850 55%);
             position: relative;
-            text-align: center;
+            overflow: hidden;
         }
 
-        /* ☀ SUN */
+        /* SUN */
         .sun {
             position: absolute;
             top: 50px;
@@ -31,41 +31,81 @@
             box-shadow: 0 0 60px rgba(255,183,3,0.8);
         }
 
-        /* 🌳 TREE */
+        /* CLOUDS */
+        .cloud {
+            position: absolute;
+            background: white;
+            width: 120px;
+            height: 60px;
+            border-radius: 50px;
+            opacity: 0.9;
+            animation: float 40s linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(120vw); }
+        }
+
+        /* BIRDS */
+        .bird {
+            position: absolute;
+            font-size: 24px;
+            animation: fly 25s linear infinite;
+        }
+
+        @keyframes fly {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(120vw); }
+        }
+
+        /* TREE */
         .tree {
             position: absolute;
-            bottom: 120px;
-            left: 100px;
+            bottom: 0;
         }
 
         .trunk {
-            width: 40px;
-            height: 130px;
+            width: 20px;
+            height: 80px;
             background: #8b5a2b;
             margin: auto;
             border-radius: 10px;
         }
 
         .leaves {
-            width: 180px;
-            height: 180px;
+            width: 80px;
+            height: 80px;
             background: #2e8b57;
             border-radius: 50%;
-            margin-top: -110px;
+            margin-top: -50px;
         }
 
-        /* 🌹 ROSES */
+        /* ROSES ON GROUND */
         .rose {
             position: absolute;
             bottom: 0;
             border-radius: 50%;
-            opacity: 0.95;
+        }
+
+        /* FALLING ROSES */
+        .falling-rose {
+            position: absolute;
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
         }
 
         /* CONTENT */
         .content {
             position: relative;
             z-index: 10;
+            text-align: center;
             padding-top: 150px;
         }
 
@@ -103,14 +143,9 @@
 </head>
 <body>
 
-<div class="scene">
+<div class="scene" id="scene">
 
     <div class="sun"></div>
-
-    <div class="tree">
-        <div class="leaves"></div>
-        <div class="trunk"></div>
-    </div>
 
     <div class="content" id="main">
         <h1>Will you be my Valentine? 💖</h1>
@@ -125,37 +160,91 @@
 </div>
 
 <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const main = document.getElementById("main");
-    const celebration = document.getElementById("celebration");
-    const scene = document.querySelector(".scene");
+    const scene = document.getElementById("scene");
 
-    // 🌹 Generate Thousands of Roses
     const colors = [
         "#ff4d6d", "#ff758f", "#ff99c8",
         "#ffb3c6", "#ffccd5", "#c9184a",
-        "#d00000", "#e63946", "#f72585",
-        "#b5179e", "#7209b7"
+        "#d00000", "#f72585", "#b5179e"
     ];
 
-    for (let i = 0; i < 800; i++) {
-        let rose = document.createElement("div");
-        rose.classList.add("rose");
+    /* 20 TREES */
+    for (let i = 0; i < 20; i++) {
+        let tree = document.createElement("div");
+        tree.className = "tree";
+        tree.style.left = Math.random() * 100 + "vw";
 
-        let size = Math.random() * 12 + 6;
+        let trunk = document.createElement("div");
+        trunk.className = "trunk";
+
+        let leaves = document.createElement("div");
+        leaves.className = "leaves";
+
+        tree.appendChild(leaves);
+        tree.appendChild(trunk);
+        scene.appendChild(tree);
+    }
+
+    /* 5 CLOUDS */
+    for (let i = 0; i < 5; i++) {
+        let cloud = document.createElement("div");
+        cloud.className = "cloud";
+        cloud.style.top = Math.random() * 200 + "px";
+        cloud.style.animationDuration = (30 + Math.random() * 20) + "s";
+        scene.appendChild(cloud);
+    }
+
+    /* 7 BIRDS */
+    for (let i = 0; i < 7; i++) {
+        let bird = document.createElement("div");
+        bird.className = "bird";
+        bird.innerHTML = "🕊";
+        bird.style.top = Math.random() * 250 + "px";
+        bird.style.animationDuration = (20 + Math.random() * 10) + "s";
+        scene.appendChild(bird);
+    }
+
+    /* GROUND ROSES */
+    for (let i = 0; i < 600; i++) {
+        let rose = document.createElement("div");
+        rose.className = "rose";
+
+        let size = Math.random() * 10 + 5;
         rose.style.width = size + "px";
         rose.style.height = size + "px";
-
         rose.style.left = Math.random() * 100 + "vw";
         rose.style.background = colors[Math.floor(Math.random() * colors.length)];
-
         rose.style.bottom = Math.random() * 40 + "px";
 
         scene.appendChild(rose);
     }
 
-    // Move No button
+    /* CONTINUOUS FALLING ROSES */
+    setInterval(() => {
+        let rose = document.createElement("div");
+        rose.className = "falling-rose";
+
+        let size = Math.random() * 8 + 4;
+        rose.style.width = size + "px";
+        rose.style.height = size + "px";
+        rose.style.left = Math.random() * 100 + "vw";
+        rose.style.background = colors[Math.floor(Math.random() * colors.length)];
+        rose.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+        scene.appendChild(rose);
+
+        setTimeout(() => {
+            rose.remove();
+        }, 7000);
+
+    }, 200);
+
+    /* NO BUTTON MOVEMENT */
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const main = document.getElementById("main");
+    const celebration = document.getElementById("celebration");
+
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
